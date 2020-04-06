@@ -9,6 +9,7 @@ A remake of snake in JavaScript
   - [ ] Gameover Screen
     - [ ] Collision detection
   - [ ] Menu
+  - [ ] Sound
   - [x] Score
     - [ ] Highscore
 
