@@ -3,6 +3,8 @@ A remake of snake in JavaScript
 ## Goals
 - [x] Movement
 - [x] Score
-- [ ] Tail
+- [x] Tail
+- [ ] Collision detection
 - [ ] Gameover Screen
 - [x] Food/Coin
+  - [ ] Correct positioning 
