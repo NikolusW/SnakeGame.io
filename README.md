@@ -1,5 +1,7 @@
 # SnakeGame.io
 A remake of snake in JavaScript
+## Link
+[Click here to run the latest version](https://nikolusw.github.io/SnakeGame.io/)
 ## Goals
 - [x] Movement
   - [x] Tail
