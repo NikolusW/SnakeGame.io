@@ -7,21 +7,32 @@ let t = false;
 let score = 0;
 let growing = false;
 let tracker = [0]
+let gameIsOver = false
+let dir = 0
 
 function setup() {
   createCanvas(500, 500);
   makeCoin();
   makeGame(posX[0], posY[0]);
+  setInterval(moveSnake,1000)
 }
 
 function draw() {
-  makeGame(posX[0], posY[0])
-  if (t == false) {
-    moveSnake();
-  }
-  if ((posX[0] == coinX) && (posY[0] == coinY)) {
-    makeCoin()
-    score++;
+
+  if (gameIsOver == false) {
+    makeGame(posX[0], posY[0])
+    gameOver()
+    changeDir()
+    if ((posX[0] == coinX) && (posY[0] == coinY)) {
+      makeCoin()
+      score++;
+    }
+  } else {
+    fill(255)
+    rect(0,0,500,500)
+    fill(0)
+    text('Game Over', 30, 20)
+    text('Score: ' + score, 30, 30)
   }
 }
 /**
@@ -45,23 +56,33 @@ function makeGrid() {
  *will require different movement.
  */
 function moveSnake() {
-  if ((keyIsPressed == true) && ((key == 's') || (key == 'S'))) {
+  if ((dir == 3)) {
     moveDown();
-    t = true
   }
-  if ((keyIsPressed == true) && ((key == 'a') || (key == 'A'))) {
+  if ((dir == 2)) {
     moveLeft();
-    t = true
   }
-  if ((keyIsPressed == true) && ((key == 'w') || (key == 'W'))) {
+  if ((dir == 1)) {
     moveUp();
-    t = true
   }
-  if ((keyIsPressed == true) && ((key == 'd') || (key == 'D'))) {
+  if ((dir == 0 )) {
     moveRight();
-    t = true
   }
 
+}
+function changeDir() {
+  if ((keyIsPressed == true) && ((key == 's') || (key == 'S'))) {
+    dir = 3
+  }
+  if ((keyIsPressed == true) && ((key == 'a') || (key == 'A'))) {
+    dir = 2
+  }
+  if ((keyIsPressed == true) && ((key == 'w') || (key == 'W'))) {
+    dir = 1
+  }
+  if ((keyIsPressed == true) && ((key == 'd') || (key == 'D'))) {
+    dir = 0
+  }
 }
 
 function makeGame(x, y) {
@@ -134,18 +155,27 @@ function moveRight() {
 
 }
 /**
- *This ensures that when the key is released, the user will be *able to move once again.
- */
-function keyReleased() {
-  t = false;
-}
-/**
  *Creates the coin, makes a random location
  */
 function makeCoin() {
   fill(100, 244, 244)
-  coinX = getRandomInt(10);
-  coinY = getRandomInt(10);
+  var done = false
+  var tempX;
+  var tempY;
+  while (!done) {
+    var i;
+    tempX = getRandomInt(10);
+    tempY = getRandomInt(10);
+    for (i = 0; i < posX.length; i++) {
+      if ((tempX == posX[i]) && (tempY == posY[i])) {
+        done = false;
+        break;
+      }
+      done = true;
+    }
+  }
+  coinX = tempX
+  coinY = tempY
   coin = true;
 }
 /**
@@ -156,8 +186,8 @@ function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
 /**
-*creates all the blocks for the snake
-*/
+ *creates all the blocks for the snake
+ */
 function makeSnake() {
   var i;
   for (i = 0; i < posX.length; i++) {
@@ -168,17 +198,17 @@ function makeSnake() {
 adds a new block at the tail of the snake
 */
 function grow() {
-    posX.push(posX[posX.length - 1])
-    posY.push(posY[posY.length - 1])
-    growing = true
+  posX.push(posX[posX.length - 1])
+  posY.push(posY[posY.length - 1])
+  growing = true
 }
 /**
-*This moves the last index to the location of the head,
-*and then find the new tail to continue
-*/
+ *This moves the last index to the location of the head,
+ *and then find the new tail to continue
+ */
 function snake() {
   if (growing == true) {
-        tracker.push(posX.length - 1)
+    tracker.push(posX.length - 1)
     posX[tracker[tracker.length - 1]] = posX[0]
     posY[tracker[tracker.length - 1]] = posY[0]
     tracker.shift()
@@ -194,4 +224,13 @@ function snake() {
     tracker.unshift(0);
   }
 
+}
+
+function gameOver() {
+  var i;
+  for (i = 1; i < posX.length; i++) {
+    if ((posX[0] == posX[i]) && (posY[0] == posY[i])) {
+      gameIsOver = true;
+    }
+  }
 }
